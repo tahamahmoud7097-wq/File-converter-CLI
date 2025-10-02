@@ -11,6 +11,7 @@ fn main() {
     let output = &args[2];
     let input_ext = input.split(".").last().unwrap_or("");
     let output_ext = output.split(".").last().unwrap_or("");
+    let now = std::time::Instant::now();
     let data: UniversalData =
     match input_ext {
         "txt" => txt_reader::read_from_txt(input, output_ext),
@@ -25,6 +26,7 @@ fn main() {
         "csv" => csv_writer::csv_writer(&data, output),
         _ => panic!("Output extension {output_ext} is not supported"),
     };
+    println!("Finished converting {input} -> {output} in {:?}", now.elapsed());
 }
 
 
