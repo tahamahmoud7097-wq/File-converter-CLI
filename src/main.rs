@@ -19,7 +19,7 @@ fn main() {
         _ => panic!("Input extension {input_ext} is not supported"),
     };
     match output_ext {
-        "json" => json_writer::json_writer(&data, output),
+        "json" => write_json::write_json(&data, output),
         "toml" => toml_writer::toml_writer(&data, output),
         "csv" => csv_writer::csv_writer(&data, output),
         _ => panic!("Output extension {output_ext} is not supported"),

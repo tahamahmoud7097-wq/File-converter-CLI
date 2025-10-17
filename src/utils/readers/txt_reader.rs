@@ -11,7 +11,10 @@ pub fn read_from_txt(path: &str, output: &str) -> UniversalData {
                 .map(|line| line.split_whitespace().map(|s| s.to_string()).collect())
                 .collect();
             let headers: &Vec<String> = &rows[1];
-            UniversalData::Table{headers: headers.to_vec(), rows: rows[1..rows.len()].to_vec()}
+            UniversalData::Table {
+                headers: headers.to_vec(),
+                rows: rows[1..rows.len()].to_vec(),
+            }
         }
         "json" => {
             let objs: json_val = serde_json::from_str(&content).unwrap();

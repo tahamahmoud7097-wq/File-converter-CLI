@@ -1,7 +1,7 @@
 use crate::utilities::UniversalData;
 use serde_json::{Value as JsonVal, json};
 
-pub fn json_writer(data: &UniversalData, path: &str) {
+pub fn write_json(data: &UniversalData, path: &str) {
     if let UniversalData::StructJson(json) = data {
         std::fs::write(path, serde_json::to_string_pretty(json).unwrap()).unwrap();
     } else if let UniversalData::Table { headers, rows } = data {
@@ -16,6 +16,7 @@ pub fn json_writer(data: &UniversalData, path: &str) {
                 JsonVal::Object(obj)
             })
             .collect();
+
         std::fs::write(path, serde_json::to_string_pretty(&json_arr).unwrap()).unwrap();
     }
 }
