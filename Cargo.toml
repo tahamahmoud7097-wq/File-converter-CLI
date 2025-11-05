@@ -1,5 +1,5 @@
 [package]
-name = "File_Converter"
+name = "fileConverterCli"
 version = "0.1.0"
 edition = "2024"
 [workspace.metadata.clippy]
