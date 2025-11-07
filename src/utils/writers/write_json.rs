@@ -1,5 +1,5 @@
 use crate::utilities::UniversalData;
-use serde_json::{Value as JsonVal, json};
+use serde_json::{Map, Value as JsonVal, json};
 
 pub fn write_json(data: &UniversalData, path: &str) {
     // Check if input data is struct, key-value based (like JSON and TOML) or table (like CSV)
@@ -11,15 +11,13 @@ pub fn write_json(data: &UniversalData, path: &str) {
         let json_arr: Vec<JsonVal> = rows
             .iter()
             .map(|row| {
-                let obj = headers
-                    .iter()
-                    .zip(row.iter())
-                    .map(|(h, v)| (h.clone(), json!(v)))
-                    .collect();
+                let mut obj: Map<String, JsonVal> = Map::new();
+                headers.iter().zip(row.iter()).for_each(|(h, v)| {
+                    obj.insert(h.clone(), json!(v));
+                });
                 JsonVal::Object(obj)
             })
             .collect();
-
         std::fs::write(
             path,
             serde_json::to_string_pretty(&json_arr).unwrap_or_default(),
