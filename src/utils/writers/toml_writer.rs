@@ -1,4 +1,4 @@
-use crate::utilities::UniversalData;
+use crate::{utilities::UniversalData, utils::BetterExpect};
 use toml::Value as toml_val;
 
 pub fn toml_writer(data: &UniversalData, path: &str) {
@@ -15,11 +15,12 @@ pub fn toml_writer(data: &UniversalData, path: &str) {
                 }
             });
             // Write into the file.
-            std::fs::write(path, output.trim_end()).expect("ERROR: Failed to write final file.");
+            std::fs::write(path, output.trim_end())
+                .better_expect("ERROR: Failed to write final file.");
         // If it doesn't have a top level Array, it will just write into the file.
         } else {
             std::fs::write(path, toml::to_string_pretty(obj).unwrap_or_default())
-                .expect("ERROR: Failed to write into output file.");
+                .better_expect("ERROR: Failed to write into output file.");
         }
     // If table based, write into the file by making keys of the TOML tables (objects) the headers (column names) of the table.
     } else if let UniversalData::Table { headers, rows } = data {
@@ -38,6 +39,6 @@ pub fn toml_writer(data: &UniversalData, path: &str) {
             toml_str.push('\n');
         });
         std::fs::write(path, toml_str.trim_end())
-            .expect("ERROR: Failed to write into output file.");
+            .better_expect("ERROR: Failed to write into output file.");
     }
 }

@@ -1,10 +1,10 @@
-use crate::utilities::UniversalData;
+use crate::{utilities::UniversalData, utils::BetterExpect};
 use serde_json::Value as JsonVal;
 use toml::Value as TomlVal;
 
 pub fn read_from_txt(path: &str, output_ext: &str) -> UniversalData {
     // matches output file extension to determine how to serialize
-    let content = std::fs::read_to_string(path).expect("ERROR: Failed to read input file.");
+    let content = std::fs::read_to_string(path).better_expect("ERROR: Failed to read input file.");
     match output_ext {
         "csv" => {
             let rows: Vec<Vec<String>> = content
@@ -19,14 +19,14 @@ pub fn read_from_txt(path: &str, output_ext: &str) -> UniversalData {
         }
         "json" => {
             let objs: JsonVal = serde_json::from_str(&content)
-                .expect("ERROR: Failed to deserialize file into JSON format.");
+                .better_expect("ERROR: Failed to deserialize file into JSON format.");
             UniversalData::StructJson(objs)
         }
         "toml" => {
             let tomls: TomlVal = toml::from_str(&content)
-                .expect("ERROR: Failed to deserialize file into TOML format.");
+                .better_expect("ERROR: Failed to deserialize file into TOML format.");
             UniversalData::StructToml(tomls)
         }
-        _ => panic!("Unsupported output format: {output_ext}"),
+        _ => std::process::exit(1),
     }
 }
