@@ -14,6 +14,7 @@ fn main() {
                 .red()
                 .bold()
         );
+        exit(1);
     }
     let input: &String = &args[1];
     let output: &String = &args[2];
@@ -26,9 +27,12 @@ fn main() {
     if !Path::new(output).exists() {
         println!(
             "{}",
-            "Output file [{output}] doesn't exist, creating a new file for it..."
-                .truecolor(179, 245, 216)
-                .italic()
+            format!(
+                "Output file [{}] doesn't exist, creating a new file for it...",
+                output
+            )
+            .truecolor(179, 245, 216)
+            .italic()
         );
         std::fs::File::create(output).better_expect("ERROR: Couldn't create output file.");
     }
