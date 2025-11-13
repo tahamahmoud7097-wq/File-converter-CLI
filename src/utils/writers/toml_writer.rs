@@ -1,9 +1,12 @@
-use crate::{utilities::UniversalData, utils::BetterExpect};
+use crate::{
+    utilities::{UniversalData, Vals},
+    utils::BetterExpect,
+};
 use toml::Value as toml_val;
 
 pub fn toml_writer(data: &UniversalData, path: &str) {
     // Check if input data is a table or struct-based (like JSON and TOML) data.
-    if let UniversalData::StructToml(obj) = data {
+    if let UniversalData::Structured(Vals::Toml(obj)) = data {
         // First, check if the data has a top level array to which TOML doesn't support to handle it by adding [[Array]] to the top of each object.
         if let toml_val::Array(arr) = obj {
             let mut output: String = String::new();

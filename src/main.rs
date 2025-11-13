@@ -36,7 +36,7 @@ fn main() {
         );
         std::fs::File::create(output).better_expect("ERROR: Couldn't create output file.");
     }
-    let repo_link = "https://github.com/tahamahmoud7097-wq/File-converter-CLI"
+    let repo_link = "https://github.com/tahamahmoud7097-wq/fiox"
         .truecolor(16, 101, 230)
         .bold();
     let input_ext: &str = input.split(".").last().unwrap_or("");

@@ -1,4 +1,7 @@
-use crate::{utilities::UniversalData, utils::BetterExpect};
+use crate::{
+    utilities::{UniversalData, Vals},
+    utils::BetterExpect,
+};
 use serde_json::Value as json_val;
 use toml::Value as toml_val;
 
@@ -12,5 +15,5 @@ pub fn toml_reader(path: &str) -> UniversalData {
         toml::from_str(&content).better_expect("ERROR: Failed to deserialize file.");
     let json_safe = serde_json::to_value(toml)
         .unwrap_or_else(|_| json_val::String("unsupported value".to_string()));
-    UniversalData::StructJson(json_safe)
+    UniversalData::Structured(Vals::Json(json_safe))
 }

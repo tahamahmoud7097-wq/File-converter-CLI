@@ -1,4 +1,7 @@
-use crate::{utilities::UniversalData, utils::BetterExpect};
+use crate::{
+    utilities::{UniversalData, Vals},
+    utils::BetterExpect,
+};
 use serde_json::Value as JsonVal;
 use toml::Value as TomlVal;
 
@@ -20,12 +23,12 @@ pub fn read_from_txt(path: &str, output_ext: &str) -> UniversalData {
         "json" => {
             let objs: JsonVal = serde_json::from_str(&content)
                 .better_expect("ERROR: Failed to deserialize file into JSON format.");
-            UniversalData::StructJson(objs)
+            UniversalData::Structured(Vals::Json(objs))
         }
         "toml" => {
             let tomls: TomlVal = toml::from_str(&content)
                 .better_expect("ERROR: Failed to deserialize file into TOML format.");
-            UniversalData::StructToml(tomls)
+            UniversalData::Structured(Vals::Toml(tomls))
         }
         _ => std::process::exit(1),
     }

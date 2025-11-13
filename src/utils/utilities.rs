@@ -1,16 +1,17 @@
 use colored::Colorize;
-use serde_json::Value as json_val;
-use toml::Value as toml_val;
-
+use serde_json::Value as JsonVal;
+use toml::Value as TomlVal;
 // Main enum for a universal data type so all readers and writers can share one type
-
+pub enum Vals {
+    Json(JsonVal),
+    Toml(TomlVal),
+}
 pub enum UniversalData {
     Table {
         headers: Vec<String>,
         rows: Vec<Vec<String>>,
     },
-    StructJson(json_val),
-    StructToml(toml_val),
+    Structured(Vals),
 }
 
 // Custom better expect trait for better error messages without duping code
