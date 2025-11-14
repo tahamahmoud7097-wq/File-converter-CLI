@@ -1,11 +1,32 @@
 use colored::Colorize;
+use serde::ser::{Serialize, Serializer};
 use serde_json::Value as JsonVal;
 use toml::Value as TomlVal;
-// Main enum for a universal data type so all readers and writers can share one type
+// Main enums for a universal data type so all readers and writers can share one type
+
+// enum for all serde_ext::Value with manual serialize impl to make the wrapper transparent
+
 pub enum Vals {
     Json(JsonVal),
     Toml(TomlVal),
 }
+
+// the impl
+
+impl Serialize for Vals {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match self {
+            Vals::Json(v) => v.serialize(serializer),
+            Vals::Toml(v) => v.serialize(serializer),
+        }
+    }
+}
+
+// main data type enum
+
 pub enum UniversalData {
     Table {
         headers: Vec<String>,

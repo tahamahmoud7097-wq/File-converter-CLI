@@ -1,14 +1,14 @@
-use crate::{
-    utilities::{UniversalData, Vals},
-    utils::BetterExpect,
-};
+use crate::{utilities::UniversalData, utils::BetterExpect};
 use toml::Value as toml_val;
 
 pub fn toml_writer(data: &UniversalData, path: &str) {
     // Check if input data is a table or struct-based (like JSON and TOML) data.
-    if let UniversalData::Structured(Vals::Toml(obj)) = data {
-        // First, check if the data has a top level array to which TOML doesn't support to handle it by adding [[Array]] to the top of each object.
-        if let toml_val::Array(arr) = obj {
+    if let UniversalData::Structured(non_toml) = data {
+        // Serialize to TOML
+        let toml_ser = toml_val::try_from(non_toml)
+            .unwrap_or_else(|_| toml_val::String("Unsupported Value".to_string()));
+        // First, check if the data has a top level array to which TOML doesn't support to handle it
+        if let toml_val::Array(arr) = toml_ser {
             let mut output: String = String::new();
             arr.iter().for_each(|item| {
                 if let toml_val::Table(obj) = item {
@@ -22,7 +22,7 @@ pub fn toml_writer(data: &UniversalData, path: &str) {
                 .better_expect("ERROR: Failed to write final file.");
         // If it doesn't have a top level Array, it will just write into the file.
         } else {
-            std::fs::write(path, toml::to_string_pretty(obj).unwrap_or_default())
+            std::fs::write(path, toml::to_string_pretty(&toml_ser).unwrap_or_default())
                 .better_expect("ERROR: Failed to write into output file.");
         }
     // If table based, write into the file by making keys of the TOML tables (objects) the headers (column names) of the table.
