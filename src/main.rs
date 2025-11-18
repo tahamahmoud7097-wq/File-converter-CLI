@@ -1,3 +1,7 @@
+// Jemalloc setup because Jemalloc is much faster than the default rust allocator
+#[global_allocator]
+static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 mod utils;
 use colored::Colorize;
 use std::path::Path;
